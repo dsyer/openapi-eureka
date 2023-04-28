@@ -1,0 +1,499 @@
+---
+openapi: 3.0.3
+info:
+  title: Generated API
+  version: "1.0"
+paths:
+  /application.wadl:
+    get:
+      responses:
+        "200":
+          description: OK
+  /application.wadl/{path}:
+    get:
+      parameters:
+      - name: path
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+  /healthcheck:
+    get:
+      responses:
+        "200":
+          description: OK
+  /serverinfo/statusoverrides:
+    get:
+      responses:
+        "200":
+          description: OK
+  /{version}/apps:
+    get:
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: regions
+        in: query
+        schema:
+          type: string
+      - name: Accept-Encoding
+        in: header
+        schema:
+          type: string
+      - name: X-Eureka-Accept
+        in: header
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+  /{version}/apps/delta:
+    get:
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: regions
+        in: query
+        schema:
+          type: string
+      - name: Accept-Encoding
+        in: header
+        schema:
+          type: string
+      - name: X-Eureka-Accept
+        in: header
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+  /{version}/apps/{appId}:
+    get:
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: X-Eureka-Accept
+        in: header
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+    post:
+      parameters:
+      - name: x-netflix-discovery-replication
+        in: header
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstanceInfo'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/InstanceInfo'
+      responses:
+        "200":
+          description: OK
+    parameters:
+    - name: appId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: version
+      in: path
+      required: true
+      schema:
+        type: string
+  /{version}/apps/{appId}/{id}:
+    get:
+      responses:
+        "200":
+          description: OK
+    put:
+      parameters:
+      - name: lastDirtyTimestamp
+        in: query
+        schema:
+          type: string
+      - name: overriddenstatus
+        in: query
+        schema:
+          type: string
+      - name: status
+        in: query
+        schema:
+          type: string
+      - name: x-netflix-discovery-replication
+        in: header
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+    delete:
+      parameters:
+      - name: x-netflix-discovery-replication
+        in: header
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+    parameters:
+    - name: appId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: version
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  /{version}/apps/{appId}/{id}/metadata:
+    put:
+      responses:
+        "200":
+          description: OK
+    parameters:
+    - name: appId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: version
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  /{version}/apps/{appId}/{id}/status:
+    put:
+      parameters:
+      - name: lastDirtyTimestamp
+        in: query
+        schema:
+          type: string
+      - name: value
+        in: query
+        schema:
+          type: string
+      - name: x-netflix-discovery-replication
+        in: header
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+    delete:
+      parameters:
+      - name: lastDirtyTimestamp
+        in: query
+        schema:
+          type: string
+      - name: value
+        in: query
+        schema:
+          type: string
+      - name: x-netflix-discovery-replication
+        in: header
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+    parameters:
+    - name: appId
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: version
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  /{version}/asg/{asgName}/status:
+    put:
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: asgName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: value
+        in: query
+        schema:
+          type: string
+      - name: x-netflix-discovery-replication
+        in: header
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+  /{version}/instances/{id}:
+    get:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+  /{version}/peerreplication/batch:
+    post:
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+  /{version}/status:
+    get:
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/StatusInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusInfo'
+  /{version}/svips/{svipAddress}:
+    get:
+      parameters:
+      - name: svipAddress
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: X-Eureka-Accept
+        in: header
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+  /{version}/vips/{vipAddress}:
+    get:
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: vipAddress
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: X-Eureka-Accept
+        in: header
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+components:
+  schemas:
+    ActionType:
+      enum:
+      - ADDED
+      - MODIFIED
+      - DELETED
+      type: string
+    DataCenterInfo:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+    InstanceInfo:
+      type: object
+      properties:
+        instanceId:
+          type: string
+        app:
+          type: string
+        appGroupName:
+          type: string
+        ipAddr:
+          type: string
+        sid:
+          type: string
+          deprecated: true
+        homePageUrl:
+          type: string
+        statusPageUrl:
+          type: string
+        healthCheckUrl:
+          type: string
+        secureHealthCheckUrl:
+          type: string
+        vipAddress:
+          type: string
+        secureVipAddress:
+          type: string
+        statusPageRelativeUrl:
+          type: string
+        statusPageExplicitUrl:
+          type: string
+        healthCheckRelativeUrl:
+          type: string
+        healthCheckSecureExplicitUrl:
+          type: string
+        vipAddressUnresolved:
+          type: string
+        secureVipAddressUnresolved:
+          type: string
+        healthCheckExplicitUrl:
+          type: string
+        countryId:
+          format: int32
+          type: integer
+          deprecated: true
+        isSecurePortEnabled:
+          type: boolean
+        isUnsecurePortEnabled:
+          type: boolean
+        dataCenterInfo:
+          $ref: '#/components/schemas/DataCenterInfo'
+        hostName:
+          type: string
+        status:
+          $ref: '#/components/schemas/InstanceStatus'
+        overriddenStatus:
+          $ref: '#/components/schemas/InstanceStatus'
+        isInstanceInfoDirty:
+          type: boolean
+        leaseInfo:
+          $ref: '#/components/schemas/LeaseInfo'
+        isCoordinatingDiscoveryServer:
+          type: boolean
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        lastUpdatedTimestamp:
+          format: int64
+          type: integer
+        lastDirtyTimestamp:
+          format: int64
+          type: integer
+        actionType:
+          $ref: '#/components/schemas/ActionType'
+        asgName:
+          type: string
+        statusWithoutDirty:
+          $ref: '#/components/schemas/InstanceStatus'
+        isDirty:
+          type: boolean
+          deprecated: true
+    InstanceStatus:
+      enum:
+      - UP
+      - DOWN
+      - STARTING
+      - OUT_OF_SERVICE
+      - UNKNOWN
+      type: string
+    LeaseInfo:
+      type: object
+      properties:
+        renewalIntervalInSecs:
+          format: int32
+          type: integer
+        durationInSecs:
+          format: int32
+          type: integer
+        registrationTimestamp:
+          format: int64
+          type: integer
+        lastRenewalTimestamp:
+          format: int64
+          type: integer
+        evictionTimestamp:
+          format: int64
+          type: integer
+        serviceUpTimestamp:
+          format: int64
+          type: integer
+    Name:
+      enum:
+      - Netflix
+      - Amazon
+      - MyOwn
+      type: string
+    StatusInfo:
+      type: object
+      properties:
+        generalStats:
+          type: object
+          additionalProperties:
+            type: string
+        applicationStats:
+          type: object
+          additionalProperties:
+            type: string
+        instanceInfo:
+          $ref: '#/components/schemas/InstanceInfo'
+        isHeathly:
+          type: boolean
+        healthy:
+          type: boolean
