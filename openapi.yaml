@@ -4,22 +4,6 @@ info:
   title: Generated API
   version: "1.0"
 paths:
-  /application.wadl:
-    get:
-      responses:
-        "200":
-          description: OK
-  /application.wadl/{path}:
-    get:
-      parameters:
-      - name: path
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        "200":
-          description: OK
   /healthcheck:
     get:
       responses:
@@ -30,6 +14,12 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/InstanceStatus'
   /{version}/apps:
     get:
       parameters:
@@ -42,10 +32,6 @@ paths:
         in: query
         schema:
           type: string
-      - name: Accept-Encoding
-        in: header
-        schema:
-          type: string
       - name: X-Eureka-Accept
         in: header
         schema:
@@ -53,6 +39,10 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Applications'
   /{version}/apps/delta:
     get:
       parameters:
@@ -65,10 +55,6 @@ paths:
         in: query
         schema:
           type: string
-      - name: Accept-Encoding
-        in: header
-        schema:
-          type: string
       - name: X-Eureka-Accept
         in: header
         schema:
@@ -76,14 +62,27 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Applications'
   /{version}/apps/{appId}:
     get:
       parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
       - name: version
         in: path
         required: true
         schema:
           type: string
+      - name: regions
+        in: query
+        schema:
+          type: string
       - name: X-Eureka-Accept
         in: header
         schema:
@@ -91,41 +90,88 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Application'
     post:
       parameters:
-      - name: x-netflix-discovery-replication
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: regions
+        in: query
+        schema:
+          type: string
+      - name: X-Eureka-Accept
         in: header
         schema:
           type: string
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/InstanceInfo'
-          application/xml:
+          '*/*':
             schema:
               $ref: '#/components/schemas/InstanceInfo'
       responses:
         "200":
           description: OK
-    parameters:
-    - name: appId
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: version
-      in: path
-      required: true
-      schema:
-        type: string
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Application'
   /{version}/apps/{appId}/{id}:
     get:
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: x-netflix-discovery-replication
+        in: header
+        schema:
+          type: string
       responses:
         "200":
           description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/InstanceInfo'
     put:
       parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
       - name: lastDirtyTimestamp
         in: query
         schema:
@@ -142,117 +188,79 @@ paths:
         in: header
         schema:
           type: string
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/InstanceInfo'
       responses:
-        "200":
-          description: OK
+        "204":
+          description: No Content
     delete:
       parameters:
-      - name: x-netflix-discovery-replication
-        in: header
+      - name: appId
+        in: path
+        required: true
         schema:
           type: string
-      responses:
-        "200":
-          description: OK
-    parameters:
-    - name: appId
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: version
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: id
-      in: path
-      required: true
-      schema:
-        type: string
-  /{version}/apps/{appId}/{id}/metadata:
-    put:
-      responses:
-        "200":
-          description: OK
-    parameters:
-    - name: appId
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: version
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: id
-      in: path
-      required: true
-      schema:
-        type: string
-  /{version}/apps/{appId}/{id}/status:
-    put:
-      parameters:
-      - name: lastDirtyTimestamp
-        in: query
+      - name: id
+        in: path
+        required: true
         schema:
           type: string
-      - name: value
-        in: query
-        schema:
-          type: string
-      - name: x-netflix-discovery-replication
-        in: header
-        schema:
-          type: string
-      responses:
-        "200":
-          description: OK
-    delete:
-      parameters:
-      - name: lastDirtyTimestamp
-        in: query
-        schema:
-          type: string
-      - name: value
-        in: query
-        schema:
-          type: string
-      - name: x-netflix-discovery-replication
-        in: header
-        schema:
-          type: string
-      responses:
-        "200":
-          description: OK
-    parameters:
-    - name: appId
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: version
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: id
-      in: path
-      required: true
-      schema:
-        type: string
-  /{version}/asg/{asgName}/status:
-    put:
-      parameters:
       - name: version
         in: path
         required: true
         schema:
           type: string
-      - name: asgName
+      - name: x-netflix-discovery-replication
+        in: header
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+  /{version}/apps/{appId}/{id}/metadata:
+    put:
+      parameters:
+      - name: appId
         in: path
         required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+  /{version}/apps/{appId}/{id}/status:
+    put:
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: lastDirtyTimestamp
+        in: query
         schema:
           type: string
       - name: value
@@ -264,8 +272,60 @@ paths:
         schema:
           type: string
       responses:
-        "200":
-          description: OK
+        "204":
+          description: No Content
+    delete:
+      parameters:
+      - name: appId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: lastDirtyTimestamp
+        in: query
+        schema:
+          type: string
+      - name: value
+        in: query
+        schema:
+          type: string
+      - name: x-netflix-discovery-replication
+        in: header
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+  /{version}/asg/{asgName}/status:
+    put:
+      parameters:
+      - name: asgName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: x-netflix-discovery-replication
+        in: header
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
   /{version}/instances/{id}:
     get:
       parameters:
@@ -279,20 +339,17 @@ paths:
         required: true
         schema:
           type: string
-      responses:
-        "200":
-          description: OK
-  /{version}/peerreplication/batch:
-    post:
-      parameters:
-      - name: version
-        in: path
-        required: true
+      - name: value
+        in: query
         schema:
           type: string
       responses:
         "200":
           description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/InstanceInfo'
   /{version}/status:
     get:
       parameters:
@@ -305,10 +362,7 @@ paths:
         "200":
           description: OK
           content:
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/StatusInfo'
-            application/json:
+            '*/*':
               schema:
                 $ref: '#/components/schemas/StatusInfo'
   /{version}/svips/{svipAddress}:
@@ -331,6 +385,10 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Applications'
   /{version}/vips/{vipAddress}:
     get:
       parameters:
@@ -351,6 +409,10 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Applications'
 components:
   schemas:
     ActionType:
@@ -359,6 +421,58 @@ components:
       - MODIFIED
       - DELETED
       type: string
+    Application:
+      type: object
+      properties:
+        name:
+          type: string
+        isDirty:
+          type: boolean
+        instances:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/InstanceInfo'
+        shuffledInstances:
+          type: object
+        instancesMap:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/InstanceInfo'
+    Applications:
+      type: object
+      properties:
+        appsHashCode:
+          type: string
+          writeOnly: true
+        versionDelta:
+          format: int64
+          type: integer
+        applications:
+          type: array
+          items:
+            $ref: '#/components/schemas/Application'
+        appNameApplicationMap:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Application'
+        virtualHostNameAppMap:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/VipIndexSupport'
+        secureVirtualHostNameAppMap:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/VipIndexSupport'
+        application:
+          type: array
+          items:
+            $ref: '#/components/schemas/Application'
+        version:
+          format: int64
+          type: integer
+          writeOnly: true
+          deprecated: true
     DataCenterInfo:
       type: object
       properties:
@@ -497,3 +611,14 @@ components:
           type: boolean
         healthy:
           type: boolean
+    VipIndexSupport:
+      type: object
+      properties:
+        instances:
+          type: array
+          items:
+            $ref: '#/components/schemas/InstanceInfo'
+        roundRobinIndex:
+          type: object
+        vipList:
+          type: object
